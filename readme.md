@@ -9,6 +9,17 @@ This webapp is a ratelimiter and logger for Zemetruc SMS API Assignment. It is b
 - Dashboard to view the logs and ratelimits
 - Authentication using JWT tokens
 
+## Approah
+
+- For ratelimiting, I have used redis to store the ratelimits. For logging, I have used a PostgreSQL database to store the logs. The frontend uses React and the backend uses Node.js and Express.js. The frontend is built using Tailwind CSS and Context API.
+
+- In my redis cache I create two keys using ip address and phone number. One is for minute ratelimit and the other is for day ratelimit.
+  The keys values are the number of SMS sent to that phone number from the given IP address in that minute/day. If it exceeds the ratelimit, the request is rejected with a 429 status code and setting the Retry-After header to the time at which the ratelimit will be reset.
+
+- In my PostgreSQL database, I create a table called Sms which stores the logs of the SMS sent to that phone number from that IP address. That table is synced with the redis cache in the ratelimiter middleware.
+
+- These persistent data stores are used to store the logs and ratelimits. The react dashboard at /dashboard uses the data from the postgres database to display the logs and ratelimits.
+
 ## Frontend Technologies
 
 - React
